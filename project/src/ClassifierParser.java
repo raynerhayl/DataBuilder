@@ -19,7 +19,7 @@ public class ClassifierParser extends Parser {
 
     public ClassifierParser(String fileName, SizeChecker checker, int idIndex) {
         super(fileName, checker);
-        transactions = new HashMap<Integer, String[]>();
+        transactions = new HashMap<>();
         this.idIndex = idIndex;
     }
     protected  void readLine(String[] tokens, int lineNum) throws ParserException, IOException{
@@ -29,7 +29,11 @@ public class ClassifierParser extends Parser {
                 String[] oldTokens = transactions.get(index);
                 boolean different = false;
                 for(int i = 0; i < oldTokens.length; i++){
-                    different = oldTokens[i].equalsIgnoreCase(tokens[i]) != true;
+                    /*
+                    TODO: Use the pay key as an indicator for whether it's valid, can always
+                    TODO: transaction in memory to check if it is in-fact changed in future
+                     */
+                    different = oldTokens[i].trim().equalsIgnoreCase(tokens[i].trim()) != true;
                 }
                 if(different){
                     String existingLine = Utility.concantTokens(oldTokens);

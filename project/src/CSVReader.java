@@ -6,7 +6,6 @@ import java.io.FileReader;
 
 import jdk.nashorn.internal.runtime.ParserException;
 import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
-import org.apache.commons.io.input.ReversedLinesFileReader;
 
 /**
  * Created by Haylem on 5/12/2017.
