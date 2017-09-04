@@ -20,7 +20,7 @@ public class ClassifierParser extends Parser {
 
     public ClassifierParser(String fileName, SizeChecker checker, int idIndex, List<Integer> toCheck) {
         super(fileName, checker);
-        transactions = new HashMap<Integer, String[]>();
+        transactions = new HashMap<>();
         this.idIndex = idIndex;
         this.toCheck = toCheck;
     }
