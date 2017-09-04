@@ -51,6 +51,7 @@ public class Utility {
     }
 
     public static Calendar getCalendar(String dateString){
+
         if(dateString.split(" ")[0].split("-").length < 3){
             return null;
         }
@@ -58,6 +59,7 @@ public class Utility {
         String[] segDate = dateString.split(" ")[0].split("-");
 
         int year_int,month_int,date_int;
+
         try {
             year_int = Integer.parseInt(segDate[0]);
             // note that month starts at 0
@@ -87,15 +89,20 @@ public class Utility {
             return null;
         }
 
-        if(line.split(" ").length <2){
+        if(line.trim().split(" ").length <2){
             return null;
         }
+
+        line = line.trim();
 
         String dateString = line.split(" ")[0];
         String timeString = line.split(" ")[1];
 
         //int day = dayOfWeek(dateString);
         Calendar cal = getCalendar(dateString);
+        if(cal == null){
+            return null;
+        }
         float timeOfDay = timeOfDay(timeString);
         float time = offset ? (int)(cal.getTimeInMillis() / 1000.0) + timeOfDay : timeOfDay;
         return new float[]{cal.get(Calendar.DAY_OF_WEEK), time};

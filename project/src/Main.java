@@ -86,7 +86,8 @@ public class Main {
         int target = askNumbers("Index of id").get(0);
         System.out.println("File to print to");
         String fileToPrint = askString();
-        Parser parser = new ClassifierParser(fileToPrint, checker, target);
+        List<Integer> toCheck = askNumbers("Indicies to check");
+        Parser parser = new ClassifierParser(fileToPrint, checker, target, toCheck);
         CSVReader csvReader = new CSVReader(reader, fileToPrint);
         try{
             csvReader.executeParser(parser);
@@ -125,7 +126,9 @@ public class Main {
 
     public void trim(BufferedReader reader){
         Parser trimParser = new TrimParser(fileName, checker);
-        CSVReader csvReader = new CSVReader(reader, "file1.txt");
+        System.out.println("File to print to (csv)");
+        String fileToPrint = askString();
+        CSVReader csvReader = new CSVReader(reader, fileToPrint);
         try{
             csvReader.executeParser(trimParser);
         } catch(ParserException e){

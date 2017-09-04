@@ -15,12 +15,14 @@ import java.util.Map;
 public class ClassifierParser extends Parser {
 
     Map<Integer, String[]> transactions;
+    List<Integer> toCheck;
     int idIndex;
 
-    public ClassifierParser(String fileName, SizeChecker checker, int idIndex) {
+    public ClassifierParser(String fileName, SizeChecker checker, int idIndex, List<Integer> toCheck) {
         super(fileName, checker);
         transactions = new HashMap<Integer, String[]>();
         this.idIndex = idIndex;
+        this.toCheck = toCheck;
     }
     protected  void readLine(String[] tokens, int lineNum) throws ParserException, IOException{
         if(idIndex < tokens.length){
@@ -28,9 +30,17 @@ public class ClassifierParser extends Parser {
             if(transactions.containsKey(index)){
                 String[] oldTokens = transactions.get(index);
                 boolean different = false;
+                boolean valid = false;
                 for(int i = 0; i < oldTokens.length; i++){
-                    different = oldTokens[i].equalsIgnoreCase(tokens[i]) != true;
+                    if (toCheck.contains(i)) {
+                        if(oldTokens[i].equalsIgnoreCase(tokens[i]) == false){
+                            valid = true;
+                        }
+                    } else {
+                        different = oldTokens[i].equalsIgnoreCase(tokens[i]) != true;
+                    }
                 }
+
                 if(different){
                     String existingLine = Utility.concantTokens(oldTokens);
                     existingLine = existingLine.concat(", false");

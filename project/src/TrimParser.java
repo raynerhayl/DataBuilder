@@ -14,6 +14,7 @@ public class TrimParser extends Parser{
     }
 
     protected void readLine(String[] tokens, int lineNum) throws ParserException, IOException{
+        System.out.println(tokens.length);
         if(tokens.length == lineCount){
             for(int i = 0; i < tokens.length; i++){
                 writer.write(tokens[i]);
@@ -23,6 +24,8 @@ public class TrimParser extends Parser{
             }
             writer.write("\n");
             writer.flush();
+        } else {
+            System.out.println("Triming line: "+lineNum);
         }
     }
 
@@ -33,6 +36,7 @@ public class TrimParser extends Parser{
             if(i < header.length-1){
                 writer.write(", ");
             }
+            lineCount++;
         }
         writer.write("\n");
         writer.flush();
