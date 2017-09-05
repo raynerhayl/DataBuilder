@@ -15,40 +15,64 @@ import java.util.Map;
 public class ClassifierParser extends Parser {
 
     Map<Integer, String[]> transactions;
+    List<Integer> validTransactions;
     List<Integer> toCheck;
+    List<Integer> toValidate;
     int idIndex;
 
-    public ClassifierParser(String fileName, SizeChecker checker, int idIndex, List<Integer> toCheck) {
+    public ClassifierParser(String fileName, SizeChecker checker, int idIndex, List<Integer> toCheck, List<Integer> toValidate) {
         super(fileName, checker);
         transactions = new HashMap<>();
+        validTransactions = new ArrayList<>();
         this.idIndex = idIndex;
         this.toCheck = toCheck;
+        this.toValidate = toValidate;
     }
     protected  void readLine(String[] tokens, int lineNum) throws ParserException, IOException{
         if(idIndex < tokens.length){
             int index = Integer.parseInt(tokens[idIndex].trim());
+            boolean valid = false;
+            boolean different = false;
+            boolean existing = false;
+
             if(transactions.containsKey(index)){
+                existing = true;
                 String[] oldTokens = transactions.get(index);
-                boolean different = false;
-                boolean valid = false;
                 for(int i = 0; i < oldTokens.length; i++){
-                    if (toCheck.contains(i)) {
-                        if(oldTokens[i].equalsIgnoreCase(tokens[i]) == false){
+                    if(toValidate.contains(i)){
+                        if(!oldTokens[i].equalsIgnoreCase(tokens[i])){
                             valid = true;
+                            // change made to feature that indicates validity
                         }
-                    } else {
-                        different = oldTokens[i].equalsIgnoreCase(tokens[i]) != true;
+                    }
+
+                    if(toCheck.contains(i)){
+                        if(!different) {
+                            different = !oldTokens[i].equalsIgnoreCase(tokens[i]);
+                        }
                     }
                 }
 
-                if(different){
+                String toWrite = ", false";
+
+                if(valid){
+                    toWrite = ", true";
+                }
+
+                if(different || (valid && !validTransactions.contains(index))){
                     String existingLine = Utility.concantTokens(oldTokens);
-                    existingLine = existingLine.concat(", false");
+                    existingLine = existingLine.concat(toWrite);
                     writer.write(existingLine);
                     writer.write("\n");
                 }
+
+                if(valid){
+                    validTransactions.add(index);
+                }
             }
-            transactions.put(index, tokens);
+            if((!valid && different)||!existing) {
+                transactions.put(index, tokens);
+            }
         }
     }
 
@@ -57,11 +81,11 @@ public class ClassifierParser extends Parser {
      * to read.
      */
     public  void close() throws IOException{
-        for(int id : transactions.keySet()){
-            String[] tokens = transactions.get(id);
-            writer.write(Utility.concantTokens(tokens)+", true");
-            writer.write("\n");
-        }
+//        for(int id : transactions.keySet()){
+//            String[] tokens = transactions.get(id);
+//            writer.write(Utility.concantTokens(tokens)+", true");
+//            writer.write("\n");
+//        }
     }
 
     public  void createHeader(String[] header) throws IOException{

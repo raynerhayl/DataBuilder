@@ -87,7 +87,8 @@ public class Main {
         System.out.println("File to print to");
         String fileToPrint = askString();
         List<Integer> toCheck = askNumbers("Indicies to check");
-        Parser parser = new ClassifierParser(fileToPrint, checker, target, toCheck);
+        List<Integer> toValidate = askNumbers("Indicies to validate from");
+        Parser parser = new ClassifierParser(fileToPrint, checker, target, toCheck, toValidate);
         CSVReader csvReader = new CSVReader(reader, fileToPrint);
         try{
             csvReader.executeParser(parser);
