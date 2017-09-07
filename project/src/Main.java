@@ -88,7 +88,9 @@ public class Main {
         String fileToPrint = askString();
         List<Integer> toCheck = askNumbers("Indicies to check");
         List<Integer> toValidate = askNumbers("Indicies to validate from");
-        Parser parser = new ClassifierParser(fileToPrint, checker, target, toCheck, toValidate);
+        System.out.println("Classify to single value?");
+        boolean singleValue = askBoolean();
+        Parser parser = new ClassifierParser(fileToPrint, checker, target, toCheck, toValidate, singleValue);
         CSVReader csvReader = new CSVReader(reader, fileToPrint);
         try{
             csvReader.executeParser(parser);
